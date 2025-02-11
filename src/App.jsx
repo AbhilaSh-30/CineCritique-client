@@ -1,22 +1,21 @@
-import { useState } from "react";
+import React from 'react'
+import { Routes,Route } from 'react-router-dom'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import VerifyEmail from './pages/VerifyEmail'
+import ResetPassword from './pages/ResetPassword'
 
-function App() {
+const App = () => {
   return (
-    <>
-      <a
-        href="#"
-        class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-      >
-        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          Noteworthy technology acquisitions 2021
-        </h5>
-        <p class="font-normal text-gray-700 dark:text-gray-400">
-          Here are the biggest enterprise technology acquisitions of 2021 so
-          far, in reverse chronological order.
-        </p>
-      </a>
-    </>
-  );
+    <div>
+      <Routes>
+        <Route path='/' element={<Home />}/>
+        <Route path='/login' element={<Login />}/>
+        <Route path='/verify-email' element={<VerifyEmail />}/>
+        <Route path='/reset-password' element={<ResetPassword />}/>
+      </Routes>
+    </div>
+  )
 }
 
-export default App;
+export default App

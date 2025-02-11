@@ -1,9 +1,12 @@
-import React from 'react'
-
+import HeroSection from "../components/HeroSection";
+import Header from "../components/Header.jsx";
 const Home = () => {
   return (
-    <div>Home</div>
-  )
-}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[url('/bg_img.png')] bg-cover bg-center">
+      <Header />
+      <HeroSection />
+    </div>
+  );
+};
 
-export default Home
+export default Home;

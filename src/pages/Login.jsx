@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext.jsx";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { ToastContainer,toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,10 +14,40 @@ const Login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
+
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const validatePassword = (password) => {
+    return (
+      password.length >= 8 &&
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /\d/.test(password) &&
+      /[!@#$%^&*]/.test(password)
+    );
+  };
+
+
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    let valid = true;
+    let newErrors = { email: "", password: "" };
+  
+    if (!validateEmail(email)) {
+      toast.error("Invalid email format");
+      valid = false;
+    }
+    if (!validatePassword(password)) {
+      toast.error("Password must be 8+ chars, include upper/lowercase letters, a number, and a special character.");
+      valid = false;
+    }
+    
+    if (!valid) return;
     try {
       setIsLoading(true); // Start loading
       axios.defaults.withCredentials = true;
@@ -67,6 +97,7 @@ const Login = () => {
         className="absolute left-5 sm:left-20 top-5 w-28 sm:w-32 cursor-pointer"
       />
       <div className="bg-slate-900 p-10 rounded-lg shadow-lg w-full sm:w-96 text-indigo-300 text-sm">
+        <ToastContainer />
         <h2 className="text-3xl font-semibold text-white text-center mb-3">
           {state === "Sign Up" ? "Create Account" : "Login"}
         </h2>

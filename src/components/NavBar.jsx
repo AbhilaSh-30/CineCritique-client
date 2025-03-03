@@ -33,7 +33,6 @@ const NavBar = () => {
 
   return (
     <nav className="relative z-50 mb-6 md:mb-10 flex justify-between items-center">
-      {/* Logo */}
       <motion.div
         className="flex items-center gap-2 text-gray-800 dark:text-white cursor-pointer"
         whileHover={{ scale: 1.05 }}
@@ -42,7 +41,6 @@ const NavBar = () => {
         <span className="text-xl font-bold">CineCritique</span>
       </motion.div>
 
-      {/* Desktop Navigation */}
       <div className="hidden md:flex space-x-8 items-center">
         {["Home", "Movies", "TV"].map((item) => (
           <motion.button
@@ -59,7 +57,6 @@ const NavBar = () => {
           </motion.button>
         ))}
 
-        {/* Search Button with Dropdown (Desktop) */}
         <div className="relative" ref={dropdownRef}>
           <motion.button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -107,7 +104,6 @@ const NavBar = () => {
           </AnimatePresence>
         </div>
 
-        {/* Dark Mode Toggle */}
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={toggleDarkMode}
@@ -122,7 +118,6 @@ const NavBar = () => {
         </motion.button>
       </div>
 
-      {/* Mobile Menu Button */}
       <button
         className="md:hidden p-2 text-gray-800 dark:text-white"
         onClick={toggleMobileMenu}
@@ -135,7 +130,6 @@ const NavBar = () => {
         )}
       </button>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -145,12 +139,10 @@ const NavBar = () => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="fixed top-0 right-0 w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-gray-900 dark:to-black transition-colors duration-300 shadow-lg p-6 flex flex-col space-y-6 md:hidden z-50"
           >
-            {/* Close Button */}
             <button className="self-end p-2" onClick={toggleMobileMenu}>
               <X className="w-6 h-6 text-gray-800 dark:text-white" />
             </button>
 
-            {/* Mobile Navigation Items */}
             {["Home", "Movies", "TV"].map((item) => (
               <button
                 key={item}
@@ -168,7 +160,6 @@ const NavBar = () => {
               </button>
             ))}
 
-            {/* Search Dropdown in Mobile Menu */}
             <div ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}

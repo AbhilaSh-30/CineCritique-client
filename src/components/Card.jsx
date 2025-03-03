@@ -18,6 +18,7 @@ const MovieCard = ({ image, name, link }) => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
+      onClick={handleClick}
     >
       <div className="aspect-[2/3] overflow-hidden bg-gray-300 dark:bg-gray-700">
         <motion.img
@@ -28,10 +29,9 @@ const MovieCard = ({ image, name, link }) => {
           transition={{ duration: 0.3 }}
         />
       </div>
-      {/* Always Visible Overlay on Mobile + Hover on Desktop */}
+      
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-100 transition-opacity duration-300" />
 
-      {/* Movie Title (Always Visible) */}
       <div className="absolute bottom-4 left-4 right-4">
         <h3 className="text-white font-bold text-lg">{name}</h3>
       </div>

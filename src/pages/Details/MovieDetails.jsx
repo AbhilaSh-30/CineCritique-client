@@ -2,14 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
-
-//   const API_KEY = process.env.TMDB_API_KEY;
-//   console.log(API_KEY);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {

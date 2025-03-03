@@ -1,15 +1,28 @@
-import React from 'react';
+import React from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 
-const Card = ({ image, name, link }) => {
+const Card = ({ image, name, link, category }) => {
   const navigate = useNavigate();
-  console.log(image,name,link);
-  const handleClick=()=>{
-    console.log("Before navigation:", `/m/${link}`);
-    navigate(`/m/${link}`);
-    console.log("After navigation");
-  }
+  const handleClick = () => {
+    let route = "/";
+
+    switch (category) {
+      case "movies":
+        route = `/movies/${link}`;
+        break;
+      case "tv":
+        route = `/tv/${link}`;
+        break;
+      case "person":
+        route = `/persons/${link}`;
+        break;
+      default:
+        route = "/";
+    }
+
+    navigate(route);
+  };
 
   return (
     <motion.div
@@ -40,4 +53,3 @@ const Card = ({ image, name, link }) => {
 };
 
 export default Card;
-

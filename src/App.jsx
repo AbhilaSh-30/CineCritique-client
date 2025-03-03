@@ -5,7 +5,9 @@ import Login from './pages/Login'
 import VerifyEmail from './pages/VerifyEmail'
 import ResetPassword from './pages/ResetPassword'
 import SearchBar from './pages/SearchBar'
-import MovieDetails from './pages/MovieDetails'
+import MovieDetails from './pages/Details/MovieDetails'
+import TvDetails from './pages/Details/TvDetails'
+import PersonDetails from './pages/Details/PersonDetails'
 
 const App = () => {
   return (
@@ -16,7 +18,9 @@ const App = () => {
         <Route path='/email-verify' element={<VerifyEmail />}/>
         <Route path='/reset-password' element={<ResetPassword />}/>
         <Route path="/search" element={<SearchBar />}/>
-        <Route path="/m/:id" element={<MovieDetails />} />
+        <Route path="/movies/:id" element={<MovieDetails />} />
+        <Route path="/tv/:id" element={<TvDetails />} />
+        <Route path="/persons/:id" element={<PersonDetails />} />
       </Routes>
     </div>
   )

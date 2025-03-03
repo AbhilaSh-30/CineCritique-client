@@ -15,8 +15,6 @@ const SearchBar = () => {
   const params = new URLSearchParams(location.search);
   const searchCategory = params.get("category") || "movies";
 
-  console.log(`${import.meta.env.VITE_BACKEND_URL}/api/search/${searchCategory}/${queryName}`);
-
   useEffect(() => {
     const searchTimeout = setTimeout(() => {
       if (queryName.length === 0) {
@@ -109,7 +107,7 @@ const SearchBar = () => {
                 transition={{ delay: 0.2 }}
                 className="text-2xl md:text-5xl font-bold text-center mb-6 text-gray-800 dark:text-white"
               >
-                Discover Your Next <span className="text-red-600 dark:text-red-500">Favorite {searchCategory === "movies" ? "Movies" : searchCategory === "tv" ? "TV Shows" : "Persons"}</span>
+                Discover Your {searchCategory === ("movies" || "tv") ? "Next" : ""} <span className="text-red-600 dark:text-red-500">Favorite {searchCategory === "movies" ? "Movies" : searchCategory === "tv" ? "TV Shows" : "Persons"}</span>
               </motion.h1>
             )}
 
@@ -178,7 +176,7 @@ const SearchBar = () => {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
                 {searchResult.map((query, index) => (
                   <motion.div key={`${query.queryLink}-${index}`} variants={itemVariants}>
-                      <Card image={query.queryImage} name={query.queryTitle} link={query.queryLink} />
+                      <Card image={query.queryImage} name={query.queryTitle} link={query.queryLink} category={searchCategory} />
                   </motion.div>
                 ))}
               </div>

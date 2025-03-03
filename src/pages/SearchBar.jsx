@@ -1,30 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Search, Moon, Sun, Film, X } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { Search, Film, X } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
-import MovieCard from '../components/Card';
+import Card from '../components/Card';
 import NavBar from '../components/NavBar';
 
 const SearchBar = () => {
   const [searchResult, setSearchResult] = useState([]);
-  const [movieName, setMovieName] = useState('');
+  const [queryName, setqueryName] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const searchCategory = params.get("category") || "movies";
+
+  console.log(`${import.meta.env.VITE_BACKEND_URL}/api/search/${searchCategory}/${queryName}`);
 
   useEffect(() => {
     const searchTimeout = setTimeout(() => {
-      if (movieName.length === 0) {
+      if (queryName.length === 0) {
         setSearchResult(null);
         setIsLoading(false);
       } else {
         setIsLoading(true);
         axios
-          .get(`${import.meta.env.VITE_BACKEND_URL}/api/search/movies/${movieName}`)
+          .get(`${import.meta.env.VITE_BACKEND_URL}/api/search/${searchCategory}/${queryName}`)
           .then((res) => {
-            const formattedResults = res.data.map((movie) => ({
-              movieLink: movie.id,
-              movieImage: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-              movieTitle: movie.title,
+            const formattedResults = res.data.map((item) => ({
+              queryLink: item.id,
+              queryImage: getImageUrl(item),
+              queryTitle: getTitle(item),
             }));
             setSearchResult(formattedResults);
             setIsLoading(false);
@@ -37,10 +43,24 @@ const SearchBar = () => {
     }, 300);
 
     return () => clearTimeout(searchTimeout);
-  }, [movieName]);
+  }, [queryName,searchCategory]);
+
+  const getTitle = (item) => {
+    if (searchCategory === "movies") return item.title;
+    if (searchCategory === "tv") return item.title;
+    if (searchCategory === "person") return item.name;
+    return "Unknown";
+  };
+
+  // Dynamically get image based on search category
+  const getImageUrl = (item) => {
+    if (item.poster_path) return `https://image.tmdb.org/t/p/w500${item.poster_path}`;
+    if (item.profile_path) return `https://image.tmdb.org/t/p/w500${item.profile_path}`;
+    return "https://via.placeholder.com/500x750?text=No+Image";
+  };
 
   const clearSearch = () => {
-    setMovieName("")
+    setqueryName("")
     setSearchResult([])
     setIsSearchActive(false)
   }
@@ -89,7 +109,7 @@ const SearchBar = () => {
                 transition={{ delay: 0.2 }}
                 className="text-2xl md:text-5xl font-bold text-center mb-6 text-gray-800 dark:text-white"
               >
-                Discover Your Next <span className="text-red-600 dark:text-red-500">Favorite Movie</span>
+                Discover Your Next <span className="text-red-600 dark:text-red-500">Favorite {searchCategory === "movies" ? "Movies" : searchCategory === "tv" ? "TV Shows" : "Persons"}</span>
               </motion.h1>
             )}
 
@@ -113,16 +133,16 @@ const SearchBar = () => {
                 </div>
                 <input
                   type="text"
-                  value={movieName}
+                  value={queryName}
                   onChange={(e) => {
-                    setMovieName(e.target.value)
+                    setqueryName(e.target.value)
                     setIsSearchActive(true)
                   }}
                   onFocus={() => setIsSearchActive(true)}
-                  className="w-full py-2 px-2 md:py-4 md:px-2 text-lg bg-transparent outline-none text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                  placeholder="Search for movies..."
+                  className="w-full py-2 px-2 md:py-2 md:px-2 text-lg bg-transparent outline-none text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                  placeholder={`Search for ${searchCategory === "movies" ? "Movies..." : searchCategory === "tv" ? "Tv shows..." : "Persons..."}`}
                 />
-                {movieName && (
+                {queryName && (
                   <button
                     onClick={clearSearch}
                     className="px-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
@@ -139,7 +159,7 @@ const SearchBar = () => {
         </motion.div>
 
         <AnimatePresence>
-          {searchResult && movieName.trim() !== "" && (
+          {searchResult && queryName.trim() !== "" && (
             <motion.div
               variants={containerVariants}
               initial="hidden"
@@ -152,13 +172,13 @@ const SearchBar = () => {
                 animate={{ opacity: 1 }}
                 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white"
               >
-                Found {searchResult.length} results for "{movieName}"
+                Found {searchResult.length} results for "{queryName}"
               </motion.h2>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-                {searchResult.map((movie, index) => (
-                  <motion.div key={`${movie.movieLink}-${index}`} variants={itemVariants}>
-                      <MovieCard image={movie.movieImage} name={movie.movieTitle} link={movie.movieLink} />
+                {searchResult.map((query, index) => (
+                  <motion.div key={`${query.queryLink}-${index}`} variants={itemVariants}>
+                      <Card image={query.queryImage} name={query.queryTitle} link={query.queryLink} />
                   </motion.div>
                 ))}
               </div>
@@ -167,7 +187,7 @@ const SearchBar = () => {
         </AnimatePresence>
 
         <AnimatePresence>
-          {isSearchActive && movieName && !searchResult && !isLoading && (
+          {isSearchActive && queryName && !searchResult && !isLoading && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -177,9 +197,9 @@ const SearchBar = () => {
               <div className="w-16 h-16 mb-4 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
                 <Film className="w-8 h-8 text-gray-400 dark:text-gray-500" />
               </div>
-              <h3 className="text-xl font-medium text-gray-800 dark:text-white mb-2">No movies found</h3>
+              <h3 className="text-xl font-medium text-gray-800 dark:text-white mb-2">No {searchCategory === "movies" ? "movies" : searchCategory === "tv" ? "tv shows" : "persons"} found</h3>
               <p className="text-gray-500 dark:text-gray-400 max-w-md">
-                We couldn't find any movies matching "{movieName}". Try a different search term.
+                We couldn't find any {searchCategory === "movies" ? "movies" : searchCategory === "tv" ? "tv shows" : "persons"} matching "{queryName}". Try a different search term.
               </p>
             </motion.div>
           )}

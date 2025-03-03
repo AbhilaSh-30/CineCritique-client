@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Sun, Film, Menu, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -9,6 +10,7 @@ const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -31,8 +33,14 @@ const NavBar = () => {
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
+  const handleSearchRedirect = (category) => {
+    navigate(`/search?category=${category}`);
+    setActiveTab("Search");
+    setIsDropdownOpen(false);
+  };
+
   return (
-    <nav className="relative z-50 mb-6 md:mb-10 flex justify-between items-center">
+    <nav className="relative z-50 mb-6 md:mb-12 flex justify-between items-center">
       <motion.div
         className="flex items-center gap-2 text-gray-800 dark:text-white cursor-pointer"
         whileHover={{ scale: 1.05 }}
@@ -45,7 +53,7 @@ const NavBar = () => {
         {["Home", "Movies", "TV"].map((item) => (
           <motion.button
             key={item}
-            className={`px-4 py-2 rounded-full text-lg font-semibold transition cursor-pointer ${
+            className={`px-4 py-2 rounded-2xl text-lg font-semibold transition cursor-pointer ${
               activeTab === item
                 ? "bg-red-600 text-white dark:bg-red-600"
                 : "text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -60,7 +68,7 @@ const NavBar = () => {
         <div className="relative" ref={dropdownRef}>
           <motion.button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-lg font-semibold transition cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-lg font-semibold transition cursor-pointer ${
               activeTab === "Search"
                 ? "bg-red-600 text-white dark:bg-red-600"
                 : "text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -76,29 +84,26 @@ const NavBar = () => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 border dark:border-gray-700 shadow-lg rounded-lg overflow-hidden"
+                className="absolute left-0 mt-2 w-40 bg-white dark:bg-gray-800 border dark:border-gray-700 shadow-lg rounded-lg overflow-hidden"
               >
-                <Link
-                  to="/search/movies"
-                  className="block px-4 py-2 text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
-                  onClick={() => setActiveTab("Search")}
+                <button
+                  className="w-full text-left px-4 py-2 text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                  onClick={() => handleSearchRedirect("movies")}
                 >
                   Search Movies
-                </Link>
-                <Link
-                  to="/search/tv"
-                  className="block px-4 py-2 text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
-                  onClick={() => setActiveTab("Search")}
+                </button>
+                <button
+                  className="w-full text-left px-4 py-2 text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                  onClick={() => handleSearchRedirect("tv")}
                 >
                   Search TV Shows
-                </Link>
-                <Link
-                  to="/search/actors"
-                  className="block px-4 py-2 text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
-                  onClick={() => setActiveTab("Search")}
+                </button>
+                <button
+                  className="w-full text-left px-4 py-2 text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+                  onClick={() => handleSearchRedirect("person")}
                 >
                   Search Actors
-                </Link>
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
@@ -179,27 +184,24 @@ const NavBar = () => {
                     exit={{ opacity: 0, y: -10 }}
                     className="mt-2 w-full bg-white dark:bg-gray-800 border dark:border-gray-700 shadow-lg rounded-lg overflow-hidden"
                   >
-                    <Link
-                      to="/search/movies"
-                      className="block px-4 py-2"
-                      onClick={() => setActiveTab("Search")}
+                    <button
+                      className="w-full text-left px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+                      onClick={() => handleSearchRedirect("movies")}
                     >
                       Search Movies
-                    </Link>
-                    <Link
-                      to="/search/tv"
-                      className="block px-4 py-2"
-                      onClick={() => setActiveTab("Search")}
+                    </button>
+                    <button
+                      className="w-full text-left px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+                      onClick={() => handleSearchRedirect("tv")}
                     >
                       Search TV Shows
-                    </Link>
-                    <Link
-                      to="/search/actors"
-                      className="block px-4 py-2"
-                      onClick={() => setActiveTab("Search")}
+                    </button>
+                    <button
+                      className="w-full text-left px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+                      onClick={() => handleSearchRedirect("person")}
                     >
                       Search Actors
-                    </Link>
+                    </button>
                   </motion.div>
                 )}
               </AnimatePresence>

@@ -2,9 +2,9 @@ import React from 'react';
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
 
-const MovieCard = ({ image, name, link }) => {
+const Card = ({ image, name, link }) => {
   const navigate = useNavigate();
-
+  console.log(image,name,link);
   const handleClick=()=>{
     console.log("Before navigation:", `/m/${link}`);
     navigate(`/m/${link}`);
@@ -29,7 +29,7 @@ const MovieCard = ({ image, name, link }) => {
           transition={{ duration: 0.3 }}
         />
       </div>
-      
+
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-100 transition-opacity duration-300" />
 
       <div className="absolute bottom-4 left-4 right-4">
@@ -39,5 +39,5 @@ const MovieCard = ({ image, name, link }) => {
   );
 };
 
-export default MovieCard;
+export default Card;
 

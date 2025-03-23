@@ -13,11 +13,11 @@ const App = () => {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<Home />}/>
+        <Route path='/home' element={<Home />}/>
         <Route path='/login' element={<Login />}/>
         <Route path='/email-verify' element={<VerifyEmail />}/>
         <Route path='/reset-password' element={<ResetPassword />}/>
-        <Route path="/search" element={<SearchBar />}/>
+        <Route path="/" element={<SearchBar />}/>
         <Route path="/movies/:id" element={<MovieDetails />} />
         <Route path="/tv/:id" element={<TvDetails />} />
         <Route path="/persons/:id" element={<PersonDetails />} />

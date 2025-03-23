@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AppContext } from "../context/AppContext";
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import { Search, Film, X } from "lucide-react";
@@ -14,6 +15,8 @@ const SearchBar = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const searchCategory = params.get("category") || "movies";
+  
+  const { userData, backendURL, setUserData, setIsLoggedIn } = useContext(AppContext);
 
   useEffect(() => {
     const searchTimeout = setTimeout(() => {
@@ -89,7 +92,9 @@ const SearchBar = () => {
   return (
     <main className="min-h-screen w-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-gray-900 dark:to-black transition-colors duration-300 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
-        <NavBar />
+        <div className='mb-15'>
+          <NavBar />
+        </div>
         <motion.div
           initial={{ y: -1, opacity: 1 }}
           animate={{
@@ -107,7 +112,7 @@ const SearchBar = () => {
                 transition={{ delay: 0.2 }}
                 className="text-2xl md:text-5xl font-bold text-center mb-6 text-gray-800 dark:text-white"
               >
-                Discover Your {searchCategory === ("movies" || "tv") ? "Next" : ""} <span className="text-red-600 dark:text-red-500">Favorite {searchCategory === "movies" ? "Movies" : searchCategory === "tv" ? "TV Shows" : "Persons"}</span>
+                {userData ? userData.name : "Hey User"}, Discover Your {searchCategory === ("movies" || "tv") ? "Next" : ""} <span className="text-red-600 dark:text-red-500">Favorite {searchCategory === "movies" ? "Movies" : searchCategory === "tv" ? "TV Shows" : "Persons"}</span>
               </motion.h1>
             )}
 

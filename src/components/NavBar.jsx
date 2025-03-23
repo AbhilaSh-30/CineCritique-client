@@ -1,5 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { AppContext } from "../context/AppContext";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Sun, Film, Menu, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +14,28 @@ const NavBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const { userData, backendURL, setUserData, setIsLoggedIn } = useContext(AppContext);
+
+  const logout = async () => {
+    try {
+      axios.defaults.withCredentials = true;
+      const { data } = await axios.post(backendURL + "/api/auth/logout");
+
+      if (data.success) {
+        setIsLoggedIn(false);
+        setUserData(null); // Set userData to null for consistency
+        toast.success("You have successfully logged out.");
+        navigate("/");
+      } else {
+        toast.error(data.message || "Logout failed. Please try again.");
+      }
+    } catch (error) {
+      console.error(error.message);
+      toast.error(
+        error.response?.data?.message || "Something went wrong during logout."
+      );
+    }
+  };
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -34,13 +59,13 @@ const NavBar = () => {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   const handleSearchRedirect = (category) => {
-    navigate(`/search?category=${category}`);
+    navigate(`/?category=${category}`);
     setActiveTab("Search");
     setIsDropdownOpen(false);
   };
 
   return (
-    <nav className="relative z-50 mb-6 md:mb-12 flex justify-between items-center">
+    <nav className="relative z-50 m-0 md:m-0 flex justify-between items-center">
       <motion.div
         className="flex items-center gap-2 text-gray-800 dark:text-white cursor-pointer"
         whileHover={{ scale: 1.05 }}
@@ -108,6 +133,32 @@ const NavBar = () => {
             )}
           </AnimatePresence>
         </div>
+
+        {userData ? (
+          <motion.button
+            className={`px-4 py-2 rounded-2xl text-lg font-semibold transition cursor-pointer ${
+              activeTab === "Logout"
+                ? "bg-red-600 text-white dark:bg-red-600"
+                : "text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+            }`}
+            whileHover={{ scale: 1.03 }}
+            onClick={logout}
+          >
+            Logout
+          </motion.button>
+        ) : (
+          <motion.button
+            className={`px-4 py-2 rounded-2xl text-lg font-semibold transition cursor-pointer ${
+              activeTab === "Login"
+                ? "bg-red-600 text-white dark:bg-red-600"
+                : "text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
+            }`}
+            whileHover={{ scale: 1.03 }}
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </motion.button>
+        )}
 
         <motion.button
           whileTap={{ scale: 0.9 }}

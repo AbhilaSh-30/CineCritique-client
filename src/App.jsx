@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect,useContext } from 'react'
 import { Routes,Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -8,8 +8,10 @@ import SearchBar from './pages/SearchBar'
 import MovieDetails from './pages/Details/MovieDetails'
 import TvDetails from './pages/Details/TvDetails'
 import PersonDetails from './pages/Details/PersonDetails'
+import { AppContext } from './context/AppContext'
 
 const App = () => {
+
   return (
     <div>
       <Routes>

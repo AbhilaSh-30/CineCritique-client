@@ -23,7 +23,7 @@ const NavBar = () => {
 
       if (data.success) {
         setIsLoggedIn(false);
-        setUserData(null); // Set userData to null for consistency
+        setUserData(null);
         toast.success("You have successfully logged out.");
         navigate("/");
       } else {

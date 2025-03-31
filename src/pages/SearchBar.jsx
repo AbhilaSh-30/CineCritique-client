@@ -15,8 +15,9 @@ const SearchBar = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const searchCategory = params.get("category") || "movies";
+
   
-  const { userData, backendURL, setUserData, setIsLoggedIn } = useContext(AppContext);
+  const { userData, backendURL } = useContext(AppContext);
 
   useEffect(() => {
     const searchTimeout = setTimeout(() => {
@@ -26,7 +27,7 @@ const SearchBar = () => {
       } else {
         setIsLoading(true);
         axios
-          .get(`${import.meta.env.VITE_BACKEND_URL}/api/search/${searchCategory}/${queryName}`)
+          .get(`${backendURL}/api/search/${searchCategory}/${queryName}`)
           .then((res) => {
             const formattedResults = res.data.map((item) => ({
               queryLink: item.id,

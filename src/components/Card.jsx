@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import Image from "../assets/image.png";
 
 const Card = ({ image, name, link, category }) => {
   const navigate = useNavigate();
@@ -35,11 +36,14 @@ const Card = ({ image, name, link, category }) => {
     >
       <div className="aspect-[2/3] overflow-hidden bg-gray-300 dark:bg-gray-700">
         <motion.img
-          src={image || "/placeholder.svg?height=300&width=200"}
+          src={image}
           alt={name}
           className="w-full h-full object-cover"
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
+          onError={(e) => {
+            e.target.src = Image;
+          }}
         />
       </div>
 
